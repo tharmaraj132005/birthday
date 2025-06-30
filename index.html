@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday!</title>
   <style>
     :root {
@@ -10,13 +10,12 @@
     }
 
     body {
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(to right, #ffecd2, #fcb69f);
-  font-family: 'Segoe UI', sans-serif;
-  overflow-x: hidden; /* allows vertical scroll but prevents horizontal */
-}
-
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
 
     .container {
       text-align: center;
@@ -78,6 +77,22 @@
       margin-left: auto;
       margin-right: auto;
       animation: fadeIn 0.5s ease;
+    }
+
+    .music-button {
+      margin-top: 25px;
+      font-size: 1.1em;
+      padding: 10px 20px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .music-button:hover {
+      background: #e91e63;
     }
 
     @keyframes fadeIn {
@@ -165,6 +180,11 @@
       .hidden-message {
         font-size: 1em;
       }
+
+      .music-button {
+        font-size: 0.9em;
+        padding: 8px 16px;
+      }
     }
   </style>
 </head>
@@ -185,22 +205,36 @@
 
     <div class="message-icon" onclick="toggleMessage()">💬</div>
     <div class="hidden-message" id="secretMessage">
-      Happy Birthday to my dear 💛🫂💛one and only best friend , intha day la iruthu oru 3 three years before the first tym unta pesunen, first romba thanks for being my frd , i should be very lucky to deserve such a good bond with you , i am one of irritating fellow to u in all hurtings and all but athulayum ena ignore panama yenta normal ah pesuva irukira , onu soluren i didn't experience this much caring and importance from anyone but u gave me these all , sometyms i may get anger with u in some situations but afterwards one msg from is enough to calm it😅
-Many tyms u asked me why i am not showing ego to you nu , see i too have egoistic mind sometyms it will say to me she is ignoring you nu but at that tym my heart will say she is not ignoring you athu apprm unoda good character , kindness , care ellame remind panum😅,at that tym i will follow what my heart words only , Coz the reason was i dont want to loose you in any situations✨ , and una mathiri nala frd lam inimel enaku kadaikamatanga😅, in the short of period we became a best friends pa, this is amazing la , na oru mom oda care and feel unta neraya tym experience paniruken , thanks for giving me that🥹, i am the type of person who wants attention all tym , but that also u gave me😭😭 u told me that i stand with ur bad tyms nu , but u r the one stand with me in all tyms unake theriyama neraya tym ena heal paniruka, in our friendship i am one who most luckiest person pa🫂🫂 see for me you are the only friend to me and i am the only friend to u , ithu over jealous than😅 i know but my frd is only mine inom kooda itha extend panalam ana persah pogum😅🔚
+      🎈 Hope your day is filled with surprises and joy! 🎁
     </div>
+
+    <button class="music-button" onclick="toggleMusic()">🔊 Play/Pause Music</button>
   </div>
 
+  <audio id="bgMusic" src="birthday.mp3" loop></audio>
+
   <script>
+    // Toggle secret message
     function toggleMessage() {
       const msg = document.getElementById("secretMessage");
       msg.style.display = (msg.style.display === "block") ? "none" : "block";
     }
-    window.addEventListener("click", function () {
-    const music = document.getElementById("bgMusic");
-    music.play().catch(() => {});
-  }, { once: true }); // Only trigger on first click
+
+    // Handle music play/pause
+    const bgMusic = document.getElementById("bgMusic");
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    }
+
+    // Auto-enable music on first interaction (mobile-safe)
+    window.addEventListener("click", () => {
+      bgMusic.play().catch(() => {});
+    }, { once: true });
   </script>
-<audio id="bgMusic" src="birthday.mp3" autoplay loop></audio>
 
 </body>
 </html>
