@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <style>
+    :root {
+      --cake-size: 10em;
+    }
+
+    body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+  font-family: 'Segoe UI', sans-serif;
+  overflow-x: hidden; /* allows vertical scroll but prevents horizontal */
+}
+
+
+    .container {
+      text-align: center;
+      padding: 80px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #ff4081;
+      animation: fadeInSlide 2s ease-out forwards;
+      opacity: 0;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 1.3em;
+      margin-top: 10px;
+      animation: fadeIn 3s ease-out forwards;
+      opacity: 0;
+    }
+
+    .cake {
+      font-size: var(--cake-size);
+      margin: 40px 0;
+      animation: bounce 2s infinite;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cake:hover {
+      transform: scale(1.2) rotate(-5deg);
+      box-shadow: 0 0 30px #ff4081aa;
+      cursor: url('f2552c37-274c-4ac1-9a18-68d158dbe15e.png') 10 10, auto;
+      animation: wobble 0.6s ease;
+    }
+
+    .message-icon {
+      font-size: 2.5em;
+      margin-top: 30px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .message-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .hidden-message {
+      display: none;
+      margin-top: 20px;
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px 20px;
+      border: 2px solid #ffeeba;
+      border-radius: 12px;
+      font-size: 1.2em;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInSlide {
+      0% { opacity: 0; transform: translateY(-30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes wobble {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(-5deg); }
+      75% { transform: rotate(3deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .confetti span {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      opacity: 0.9;
+      animation: confettiFall 6s linear infinite;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .confetti span:nth-child(1) { background: #ff4081; left: 5%; animation-delay: 0s; }
+    .confetti span:nth-child(2) { background: #ffeb3b; left: 12%; animation-delay: 1s; }
+    .confetti span:nth-child(3) { background: #4caf50; left: 20%; animation-delay: 2s; }
+    .confetti span:nth-child(4) { background: #2196f3; left: 30%; animation-delay: 3s; }
+    .confetti span:nth-child(5) { background: #9c27b0; left: 45%; animation-delay: 4s; }
+    .confetti span:nth-child(6) { background: #f44336; left: 60%; animation-delay: 2.5s; }
+    .confetti span:nth-child(7) { background: #00bcd4; left: 75%; animation-delay: 1.5s; }
+    .confetti span:nth-child(8) { background: #8bc34a; left: 85%; animation-delay: 0.5s; }
+    .confetti span:nth-child(9) { background: #ffc107; left: 92%; animation-delay: 1.2s; }
+    .confetti span:nth-child(10) { background: #e91e63; left: 98%; animation-delay: 0.8s; }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .message {
+        font-size: 1.1em;
+      }
+
+      :root {
+        --cake-size: 6em;
+      }
+
+      .message-icon {
+        font-size: 2em;
+      }
+
+      .hidden-message {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="container">
+    <h1>🎉 Happy Birthday, Tharmaraj! 🎉</h1>
+    <div class="cake">🎂</div>
+    <div class="message">
+      Happy Birthday!<br>
+      – With love, Catty 💖
+    </div>
+
+    <div class="message-icon" onclick="toggleMessage()">💬</div>
+    <div class="hidden-message" id="secretMessage">
+      Happy Birthday to my dear 💛🫂💛one and only best friend , intha day la iruthu oru 3 three years before the first tym unta pesunen, first romba thanks for being my frd , i should be very lucky to deserve such a good bond with you , i am one of irritating fellow to u in all hurtings and all but athulayum ena ignore panama yenta normal ah pesuva irukira , onu soluren i didn't experience this much caring and importance from anyone but u gave me these all , sometyms i may get anger with u in some situations but afterwards one msg from is enough to calm it😅
+Many tyms u asked me why i am not showing ego to you nu , see i too have egoistic mind sometyms it will say to me she is ignoring you nu but at that tym my heart will say she is not ignoring you athu apprm unoda good character , kindness , care ellame remind panum😅,at that tym i will follow what my heart words only , Coz the reason was i dont want to loose you in any situations✨ , and una mathiri nala frd lam inimel enaku kadaikamatanga😅, in the short of period we became a best friends pa, this is amazing la , na oru mom oda care and feel unta neraya tym experience paniruken , thanks for giving me that🥹, i am the type of person who wants attention all tym , but that also u gave me😭😭 u told me that i stand with ur bad tyms nu , but u r the one stand with me in all tyms unake theriyama neraya tym ena heal paniruka, in our friendship i am one who most luckiest person pa🫂🫂 see for me you are the only friend to me and i am the only friend to u , ithu over jealous than😅 i know but my frd is only mine inom kooda itha extend panalam ana persah pogum😅🔚
+    </div>
+  </div>
+
+  <script>
+    function toggleMessage() {
+      const msg = document.getElementById("secretMessage");
+      msg.style.display = (msg.style.display === "block") ? "none" : "block";
+    }
+    window.addEventListener("click", function () {
+    const music = document.getElementById("bgMusic");
+    music.play().catch(() => {});
+  }, { once: true }); // Only trigger on first click
+  </script>
+<audio id="bgMusic" src="birthday.mp3" autoplay loop></audio>
+
+</body>
+</html>
