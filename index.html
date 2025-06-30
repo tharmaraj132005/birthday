@@ -44,12 +44,12 @@
       margin: 40px 0;
       animation: bounce 2s infinite;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: url('f2552c37-274c-4ac1-9a18-68d158dbe15e.png') 10 10, auto;
     }
 
     .cake:hover {
       transform: scale(1.2) rotate(-5deg);
       box-shadow: 0 0 30px #ff4081aa;
-      cursor: url('f2552c37-274c-4ac1-9a18-68d158dbe15e.png') 10 10, auto;
       animation: wobble 0.6s ease;
     }
 
@@ -190,14 +190,19 @@
 </head>
 <body>
 
+  <!-- Confetti -->
   <div class="confetti">
     <span></span><span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span><span></span>
   </div>
 
+  <!-- Main Content -->
   <div class="container">
     <h1>🎉 Happy Birthday, Tharmaraj! 🎉</h1>
-    <div class="cake">🎂</div>
+
+    <!-- Cake -->
+    <div class="cake" id="cakeEmoji" onclick="cutCake()">🎂</div>
+
     <div class="message">
       Happy Birthday!<br>
       – With love, Catty 💖
@@ -211,17 +216,19 @@
     <button class="music-button" onclick="toggleMusic()">🔊 Play/Pause Music</button>
   </div>
 
-  <audio id="bgMusic" src="happy-birthday-334876.mp3" loop></audio>
+  <!-- Background Music -->
+  <audio id="bgMusic" src="birthday.mp3" preload="auto" loop></audio>
 
+  <!-- Script -->
   <script>
-    // Toggle secret message
+    const bgMusic = document.getElementById("bgMusic");
+    const cake = document.getElementById("cakeEmoji");
+
     function toggleMessage() {
       const msg = document.getElementById("secretMessage");
       msg.style.display = (msg.style.display === "block") ? "none" : "block";
     }
 
-    // Handle music play/pause
-    const bgMusic = document.getElementById("bgMusic");
     function toggleMusic() {
       if (bgMusic.paused) {
         bgMusic.play();
@@ -230,7 +237,13 @@
       }
     }
 
-    // Auto-enable music on first interaction (mobile-safe)
+    function cutCake() {
+      if (cake.innerText === "🎂") {
+        cake.innerText = "🍰";
+      }
+    }
+
+    // Auto-play on first interaction (mobile-friendly)
     window.addEventListener("click", () => {
       bgMusic.play().catch(() => {});
     }, { once: true });
