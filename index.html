@@ -17,19 +17,40 @@
       overflow-x: hidden;
     }
 
+    .gift-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-size: 6em;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.1);
+    }
+
     .container {
       text-align: center;
       padding: 80px 20px;
       position: relative;
       z-index: 2;
+      display: none;
     }
 
     h1 {
       font-size: 2.5em;
       color: #ff4081;
-      animation: fadeInSlide 2s ease-out forwards;
+      animation: glow 1.5s infinite alternate, fadeInSlide 2s ease-out forwards;
       opacity: 0;
       margin-bottom: 20px;
+      text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff4081; }
+      to { text-shadow: 0 0 20px #ff4081, 0 0 30px #ff4081; }
     }
 
     .message {
@@ -50,7 +71,6 @@
     .cake:hover {
       transform: scale(1.2) rotate(-5deg);
       box-shadow: 0 0 30px #ff4081aa;
-      
     }
 
     .tap-instruction {
@@ -118,15 +138,8 @@
       50% { transform: translateY(-15px); }
     }
 
-    @keyframes wobble {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      50% { transform: rotate(-5deg); }
-      75% { transform: rotate(3deg); }
-      100% { transform: rotate(0deg); }
-    }
-
     .confetti {
+      display: none;
       position: absolute;
       width: 100%;
       height: 100%;
@@ -147,96 +160,83 @@
     }
 
     @keyframes confettiFall {
-      0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 
-    .confetti span:nth-child(1) { background: #ff4081; left: 5%; animation-delay: 0s; }
-    .confetti span:nth-child(2) { background: #ffeb3b; left: 12%; animation-delay: 1s; }
-    .confetti span:nth-child(3) { background: #4caf50; left: 20%; animation-delay: 2s; }
-    .confetti span:nth-child(4) { background: #2196f3; left: 30%; animation-delay: 3s; }
-    .confetti span:nth-child(5) { background: #9c27b0; left: 45%; animation-delay: 4s; }
-    .confetti span:nth-child(6) { background: #f44336; left: 60%; animation-delay: 2.5s; }
-    .confetti span:nth-child(7) { background: #00bcd4; left: 75%; animation-delay: 1.5s; }
-    .confetti span:nth-child(8) { background: #8bc34a; left: 85%; animation-delay: 0.5s; }
-    .confetti span:nth-child(9) { background: #ffc107; left: 92%; animation-delay: 1.2s; }
-    .confetti span:nth-child(10) { background: #e91e63; left: 98%; animation-delay: 0.8s; }
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 30px;
+      height: 40px;
+      background: red;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: floatBalloon 10s linear infinite;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background: white;
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatBalloon {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    canvas {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
     @media (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-      }
-
-      .message {
-        font-size: 1.1em;
-      }
-
-      :root {
-        --cake-size: 6em;
-      }
-
-      .message-icon {
-        font-size: 2em;
-      }
-
-      .hidden-message {
-        font-size: 1em;
-      }
-
-      .music-button {
-        font-size: 0.9em;
-        padding: 8px 16px;
-      }
-
-      .tap-instruction {
-        font-size: 0.9em;
-      }
+      h1 { font-size: 2em; }
+      .message { font-size: 1.1em; }
+      :root { --cake-size: 6em; }
+      .message-icon { font-size: 2em; }
+      .hidden-message { font-size: 1em; }
+      .music-button { font-size: 0.9em; padding: 8px 16px; }
+      .tap-instruction { font-size: 0.9em; }
     }
   </style>
 </head>
 <body>
+  <div class="gift-box" onclick="revealBirthday()">🎁</div>
 
-  <!-- Confetti -->
-  <div class="confetti">
+  <canvas id="fireworks"></canvas>
+  <div class="confetti" id="confetti">
     <span></span><span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span><span></span>
   </div>
-
-  <!-- Main Content -->
-  <div class="container">
+  <div class="container" id="birthdayContent">
     <h1>🎉 Happy Birthday, Tharmaraj! 🎉</h1>
-
-    <!-- Cake Emoji -->
     <div class="cake" id="cakeEmoji" onclick="toggleCake()">🎂</div>
     <div class="tap-instruction">Tap the cake</div>
-
-    <div class="message">
-      Happy Birthday!<br>
-      – With love, Catty 💖
-    </div>
-
+    <div class="message">Happy Birthday!<br>– With love, Catty 💖</div>
     <div class="message-icon" onclick="toggleMessage()">💬</div>
     <div class="hidden-message" id="secretMessage">
-      Happy Birthday to my dear 💛🫂💛one and only best friend , intha day la iruthu oru 3 three years before the first tym unta pesunen, first romba thanks for being my frd , i should be very lucky to deserve such a good bond with you , i am one of irritating fellow to u in all hurtings and all but athulayum ena ignore panama yenta normal ah pesuva irukira , onu soluren i didn't experience this much caring and importance from anyone but u gave me these all , sometyms i may get anger with u in some situations but afterwards one msg from is enough to calm it😅
-Many tyms u asked me why i am not showing ego to you nu , see i too have egoistic mind sometyms it will say to me she is ignoring you nu but at that tym my heart will say she is not ignoring you athu apprm unoda good character , kindness , care ellame remind panum😅,at that tym i will follow what my heart words only , Coz the reason was i dont want to loose you in any situations✨ , and una mathiri nala frd lam inimel enaku kadaikamatanga😅, in the short of period we became a best friends pa, this is amazing la , na oru mom oda care and feel unta neraya tym experience paniruken , thanks for giving me that🥹, i am the type of person who wants attention all tym , but that also u gave me😭😭 u told me that i stand with ur bad tyms nu , but u r the one stand with me in all tyms unake theriyama neraya tym ena heal paniruka, in our friendship i am one who most luckiest person pa🫂🫂 see for me you are the only friend to me and i am the only friend to u , ithu over jealous than😅 i know but my frd is only mine inom kooda itha extend panalam ana persah pogum😅🔚
+      Happy Birthday to my dear 💛🫂💛one and only best friend [...] 🔚
     </div>
-
     <button class="music-button" onclick="toggleMusic()">🔊 Play/Pause Music</button>
   </div>
-
-  <!-- Background Music -->
   <audio id="bgMusic" src="birthday.mp3" preload="auto" loop></audio>
-
-  <!-- Script -->
   <script>
     const bgMusic = document.getElementById("bgMusic");
     const cake = document.getElementById("cakeEmoji");
+    const container = document.getElementById("birthdayContent");
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    const confettiDiv = document.getElementById("confetti");
 
     function toggleMessage() {
       const msg = document.getElementById("secretMessage");
@@ -254,12 +254,87 @@ Many tyms u asked me why i am not showing ego to you nu , see i too have egoisti
     function toggleCake() {
       cake.innerText = (cake.innerText === "🎂") ? "🍰" : "🎂";
     }
+// ✅ On first page load: check if gift is already opened
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('giftOpened') === 'true') {
+    document.querySelector(".gift-box").style.display = "none";
+    container.style.display = "block";
+    confettiDiv.style.display = "block";
+    canvas.style.display = "block";
+    bgMusic.play().catch(() => {});
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    startFireworks();
+    startBalloons();
+  }
+});
 
-    // Auto-play on first interaction (mobile support)
-    window.addEventListener("click", () => {
-      bgMusic.play().catch(() => {});
-    }, { once: true });
+   function revealBirthday() {
+  document.querySelector(".gift-box").style.display = "none";
+  container.style.display = "block";
+  confettiDiv.style.display = "block";
+  canvas.style.display = "block";
+  bgMusic.play().catch(() => {});
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  startFireworks();
+  startBalloons();
+
+  // ✅ Store state so it doesn’t reset on scroll/rotate
+  localStorage.setItem('giftOpened', 'true');
+}
+
+
+    const particles = [];
+    function createParticle(x, y) {
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x,
+          y,
+          speed: Math.random() * 5 + 2,
+          angle: Math.random() * 2 * Math.PI,
+          radius: Math.random() * 2 + 1,
+          alpha: 1
+        });
+      }
+    }
+
+    function updateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += Math.cos(p.angle) * p.speed;
+        p.y += Math.sin(p.angle) * p.speed;
+        p.alpha -= 0.01;
+        ctx.fillStyle = `rgba(255, ${100 + Math.random()*155}, ${Math.random()*255}, ${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+        ctx.fill();
+        if (p.alpha <= 0) particles.splice(i, 1);
+      });
+      requestAnimationFrame(updateParticles);
+    }
+
+    function startFireworks() {
+      setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height * 0.5;
+        createParticle(x, y);
+      }, 1000);
+      updateParticles();
+    }
+
+    function createBalloon() {
+      const balloon = document.createElement("div");
+      balloon.className = "balloon";
+      balloon.style.left = Math.random() * window.innerWidth + "px";
+      balloon.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+      document.body.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 10000);
+    }
+
+    function startBalloons() {
+      setInterval(createBalloon, 800);
+    }
   </script>
-
 </body>
 </html>
