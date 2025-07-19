@@ -20,16 +20,40 @@
 
     .gift-box {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
       font-size: 6em;
       cursor: pointer;
       transition: transform 0.3s;
+      position: relative;
     }
 
     .gift-box:hover {
       transform: scale(1.1);
+    }
+
+    .vel-icon {
+      width: 60px;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    .vel-blessing {
+      font-size: 0.45em;
+      color: #a30000;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-align: center;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
 
     .container {
@@ -124,28 +148,6 @@
       background: #e91e63;
     }
 
-    .floating-image,
-    .balloon {
-      position: absolute;
-      width: 120px;
-      height: auto;
-      animation: floatImage 20s linear infinite;
-      display: none;
-      z-index: 1;
-    }
-
-    .balloon {
-      width: 80px;
-      animation: floatImage 25s linear infinite;
-    }
-
-    @keyframes floatImage {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-    }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
@@ -170,6 +172,28 @@
       pointer-events: none;
     }
 
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 40px;
+      animation: floatUp linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
       .message { font-size: 1.1em; }
@@ -182,10 +206,22 @@
   </style>
 </head>
 <body>
-  <div class="gift-box" onclick="revealBirthday()">🎁</div>
+  <div class="gift-box" onclick="revealBirthday()">
+    <img src="vel.png" alt="Vel Icon" class="vel-icon" />
+    <div class="vel-blessing">May the Lord Murugar bless you with everything and protect you!</div>
+    🎁
+  </div>
+
   <canvas id="fireworks"></canvas>
 
   <div class="container" id="birthdayContent">
+    <div id="balloons-container">
+      <img src="balloon1.png" class="balloon" style="left: 10%; animation-duration: 10s;">
+      <img src="balloon2.png" class="balloon" style="left: 25%; animation-duration: 12s;">
+      <img src="balloon1.png" class="balloon" style="left: 45%; animation-duration: 11s;">
+      <img src="balloon2.png" class="balloon" style="left: 65%; animation-duration: 13s;">
+      <img src="balloon1.png" class="balloon" style="left: 80%; animation-duration: 9s;">
+    </div>
     <h1>🎉 Happy Birthday, Tharmaraj! 🎉</h1>
     <div class="cake" id="cakeEmoji" onclick="toggleCake()">🎂</div>
     <div class="tap-instruction">Tap the cake</div>
@@ -196,20 +232,6 @@
     </div>
     <button class="music-button" onclick="toggleMusic()">🔊 Play/Pause Music</button>
   </div>
-
-  <!-- Floating Images (initially hidden) -->
-  <img src="1.jpeg" class="floating-image" id="img1" style="left: 5%; animation-delay: 0s;">
-  <img src="2.jpeg" class="floating-image" id="img2" style="left: 25%; animation-delay: 4s;">
-  <img src="3.jpeg" class="floating-image" id="img3" style="left: 45%; animation-delay: 8s;">
-  <img src="4.jpeg" class="floating-image" id="img4" style="left: 65%; animation-delay: 12s;">
-  <img src="5.jpeg" class="floating-image" id="img5" style="left: 85%; animation-delay: 16s;">
-
-  <!-- Balloons -->
-  <img src="1.jpeg" class="balloon" id="balloon1" style="left: 10%; animation-delay: 1s;">
-  <img src="2.jpeg" class="balloon" id="balloon2" style="left: 30%; animation-delay: 3s;">
-  <img src="3.jpeg" class="balloon" id="balloon3" style="left: 50%; animation-delay: 5s;">
-  <img src="4.jpeg" class="balloon" id="balloon4" style="left: 70%; animation-delay: 7s;">
-  <img src="5.jpeg" class="balloon" id="balloon5" style="left: 90%; animation-delay: 9s;">
 
   <audio id="bgMusic" src="birthday.mp3" preload="auto" loop></audio>
 
@@ -245,14 +267,6 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       startFireworks();
-      showFloatingItems();
-    }
-
-    function showFloatingItems() {
-      for (let i = 1; i <= 5; i++) {
-        document.getElementById(`img${i}`).style.display = "block";
-        document.getElementById(`balloon${i}`).style.display = "block";
-      }
     }
 
     const particles = [];
