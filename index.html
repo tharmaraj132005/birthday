@@ -73,6 +73,12 @@
       text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081;
     }
 
+    #countup {
+      font-size: 1.1em;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
     @keyframes glow {
       from { text-shadow: 0 0 10px #ff4081; }
       to { text-shadow: 0 0 20px #ff4081, 0 0 30px #ff4081; }
@@ -213,6 +219,7 @@
   </div>
 
   <canvas id="fireworks"></canvas>
+  <canvas id="confettiCanvas"></canvas>
 
   <div class="container" id="birthdayContent">
     <div id="balloons-container">
@@ -223,6 +230,7 @@
       <img src="5.jpeg" class="images" style="left: 80%; animation-duration: 20s;">
     </div>
     <h1>🎉 Happy Birthday, Tharmaraj! 🎉</h1>
+    <div id="countup"></div>
     <div class="cake" id="cakeEmoji" onclick="toggleCake()">🎂</div>
     <div class="tap-instruction">Tap the cake</div>
     <div class="message">Happy Birthday!<br>– With love, Catty 💖</div>
@@ -241,6 +249,8 @@
     const container = document.getElementById("birthdayContent");
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
+    const confettiCanvas = document.getElementById("confettiCanvas");
+    const confettiCtx = confettiCanvas.getContext("2d");
 
     function toggleMessage() {
       const msg = document.getElementById("secretMessage");
@@ -263,10 +273,15 @@
       document.querySelector(".gift-box").style.display = "none";
       container.style.display = "block";
       canvas.style.display = "block";
+      confettiCanvas.style.display = "block";
       bgMusic.play().catch(() => {});
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
       startFireworks();
+      startConfetti();
+      startCountUp();
     }
 
     const particles = [];
@@ -305,6 +320,69 @@
         createParticle(x, y);
       }, 1000);
       updateParticles();
+    }
+
+    function startConfetti() {
+      const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
+      const confetti = [];
+      for (let i = 0; i < 100; i++) {
+        confetti.push({
+          x: Math.random() * confettiCanvas.width,
+          y: Math.random() * confettiCanvas.height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 10 + 10,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.floor(Math.random() * 10) - 10,
+          tiltAngle: 0,
+          tiltAngleIncremental: (Math.random() * 0.07) + .05
+        });
+      }
+
+      function drawConfetti() {
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confetti.forEach(c => {
+          confettiCtx.beginPath();
+          confettiCtx.lineWidth = c.r / 2;
+          confettiCtx.strokeStyle = c.color;
+          confettiCtx.moveTo(c.x + c.tilt + c.r / 4, c.y);
+          confettiCtx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 4);
+          confettiCtx.stroke();
+        });
+        updateConfetti();
+        requestAnimationFrame(drawConfetti);
+      }
+
+      function updateConfetti() {
+        confetti.forEach(c => {
+          c.tiltAngle += c.tiltAngleIncremental;
+          c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+          c.x += Math.sin(c.d);
+          c.tilt = Math.sin(c.tiltAngle) * 15;
+
+          if (c.y > confettiCanvas.height) {
+            c.y = -10;
+            c.x = Math.random() * confettiCanvas.width;
+          }
+        });
+      }
+
+      drawConfetti();
+    }
+
+    function startCountUp() {
+      const startDate = new Date("2004-09-27T00:00:00");
+      const countup = document.getElementById("countup");
+      function updateCounter() {
+        const now = new Date();
+        const diff = now - startDate;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        countup.textContent = `You have been alive for ${days} days, ${hours} hrs, ${minutes} mins, ${seconds} secs`;
+      }
+      updateCounter();
+      setInterval(updateCounter, 1000);
     }
   </script>
 </body>
