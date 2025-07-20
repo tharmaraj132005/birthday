@@ -90,6 +90,42 @@
       animation: fadeIn 3s ease-out forwards;
       opacity: 0;
     }
+.memories-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 16px;
+  background-color: #ff80ab;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.memories-btn:hover {
+  background-color: #f06292;
+}
+
+.memories-gallery {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.memories-gallery img {
+  width: 120px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.memories-gallery img:hover {
+  transform: scale(1.05);
+}
+
 
     .cake {
       font-size: var(--cake-size);
@@ -238,6 +274,16 @@
     <div class="hidden-message" id="secretMessage">
       Happy Birthday to my dear 💛🫂💛one and only best friend [...] 🔚
     </div>
+    <!-- Memories Button -->
+<button class="memories-btn" onclick="toggleMemories()">Bring Back Memories</button>
+
+<!-- Hidden photo gallery -->
+<div id="memories-gallery" class="memories-gallery" style="display: none;">
+  <img src="6.png" alt="Memory 2">
+  <img src="7.png" alt="Memory 3">
+  <img src="8.png" alt="Memory 4">
+</div>
+
     <button class="music-button" onclick="toggleMusic()">🔊 Play/Pause Music</button>
   </div>
 
@@ -379,11 +425,16 @@
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
         const seconds = Math.floor((diff / 1000) % 60);
-        countup.textContent = `You have been alive for ${days} days, ${hours} hrs, ${minutes} mins, ${seconds} secs`;
+        countup.textContent = `${days} days, ${hours} hrs, ${minutes} mins, ${seconds} secs`;
       }
       updateCounter();
       setInterval(updateCounter, 1000);
     }
+function toggleMemories() {
+  const gallery = document.getElementById('memories-gallery');
+  gallery.style.display = gallery.style.display === 'none' ? 'flex' : 'none';
+}
+
   </script>
 </body>
 </html>
